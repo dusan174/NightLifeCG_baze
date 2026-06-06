@@ -1,0 +1,68 @@
+﻿@model IEnumerable<NightLifeCG.Models.Rezervacije>
+
+@{
+    ViewData["Title"] = "Moje rezervacije";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Moje rezervacije</h2>
+
+    @* Poruka uspjeha *@
+    @if (TempData["Uspjeh"] != null)
+    {
+        <div class="alert alert-success">@TempData["Uspjeh"]</div>
+    }
+
+    @if (Model.Any()) @* Ako ima rezervacija *@
+    {
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Klub</th>
+                    <th>Sto</th>
+                    <th>Datum</th>
+                    <th>Gosti</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model)
+                {
+                    <tr>
+                        <td>@r.Stol?.Klub?.Naziv</td> @* Naziv kluba *@
+                        <td>@r.Stol?.BrojStola</td>   @* Broj stola *@
+                        <td>@r.DatumRezervacije.ToString("dd.MM.yyyy")</td> @* Datum *@
+                        <td>@r.BrojGostiju</td>        @* Broj gostiju *@
+                        <td>
+                            @* Status sa bojama *@
+                            @if (r.Status == 0)
+                            {
+                                <span class="badge bg-warning text-dark">Na čekanju</span>
+                            }
+                            else if (r.Status == 1)
+                            {
+                                <span class="badge bg-success">Potvrđeno</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Otkazano</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+ @* Ako nema rezervacija *@
+    {
+        <div class="alert alert-info">
+            Nemate još nijednu rezervaciju.
+            <a asp-controller="Klub" asp-action="Index">Pogledajte klubove</a>
+        </div>
+    }
+
+    <a asp-controller="Klub" asp-action="Index" class="btn btn-secondary mt-2">
+        ← Nazad na klubove
+    </a>
+</div>

@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Rezervacija";
+    var klub = ViewBag.Klub as NightLifeCG.Models.Klubovi;
+}
+
+<div class="container mt-4">
+    <h2>Rezervacija stola — @klub?.Naziv</h2>
+    <p class="text-muted">📍 @klub?.Adresa, @klub?.Grad?.Naziv</p>
+
+    @* Prikaz greske ako postoji *@
+    @if (TempData["Greska"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Greska"]</div>
+    }
+
+    <form method="post" asp-action="Kreiraj">
+        @* Skriveno polje - salje klubId *@
+        <input type="hidden" name="klubId" value="@klub?.KlubId" />
+
+        @* Odabir stola *@
+        <div class="mb-3">
+            <label class="form-label">Odaberi sto</label>
+            <select name="stolId" class="form-select" required>
+                <option value="">-- Odaberi sto --</option>
+                @foreach (var sto in ViewBag.Stolovi)
+                {
+                    <option value="@sto.StolId">
+                        Sto @sto.BrojStola — @sto.BrojMjesta mjesta
+                        @(sto.JeVip == true ? "⭐ VIP" : "")
+                    </option>
+                }
+            </select>
+        </div>
+
+        @* Datum rezervacije *@
+        <div class="mb-3">
+            <label class="form-label">Datum rezervacije</label>
+            <input type="date" name="datumRezervacije" class="form-control"
+                   min="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+        </div>
+
+        @* Broj gostiju *@
+        <div class="mb-3">
+            <label class="form-label">Broj gostiju</label>
+            <input type="number" name="brojGostiju" class="form-control"
+                   min="1" max="20" required />
+        </div>
+
+        <button type="submit" class="btn btn-success">🪑 Potvrdi rezervaciju</button>
+        <a asp-controller="Klub" asp-action="Detalji" asp-route-id="@klub?.KlubId"
+           class="btn btn-secondary">← Nazad</a>
+    </form>
+</div>
