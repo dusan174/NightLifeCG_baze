@@ -33,6 +33,15 @@ namespace NightLifeCG.Controllers
 
         public async Task<IActionResult> Kreiraj(int stolId, int klubId, DateTime datumRezervacije, int brojGostiju)
         {
+            var sto = await _db.Stolovis.FirstOrDefaultAsync(s => s.StolId == stolId);
+
+            if (sto != null && brojGostiju > sto.BrojMjesta)
+            {
+                TempData["Greska"] = $"Broj gostiju ({brojGostiju}) je veći od kapaciteta stola ({sto.BrojMjesta} mjesta)!";
+                return RedirectToAction("Kreiraj", new { klubId = klubId });
+            }
+
+
             var postojiRezervacija = await _db.Rezervacijes
                 .AnyAsync(r => r.StolId == stolId && r.DatumRezervacije.Date == datumRezervacije.Date && r.Status != 2);
             
