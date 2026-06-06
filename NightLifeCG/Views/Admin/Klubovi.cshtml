@@ -1,0 +1,64 @@
+﻿@model IEnumerable<NightLifeCG.Models.Klubovi>
+
+@{
+    ViewData["Title"] = "Admin - Klubovi";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between mb-4">
+        <h2>⚙️ Admin — Klubovi</h2>
+        <a asp-action="DodajKlub" class="btn btn-primary">+ Dodaj novi klub</a>
+    </div>
+
+    @if (TempData["Uspjeh"] != null)
+    {
+        <div class="alert alert-success">@TempData["Uspjeh"]</div>
+    }
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Naziv</th>
+                <th>Grad</th>
+                <th>Žanr</th>
+                <th>Cijena ulaza</th>
+                <th>Ocjena</th>
+                <th>Status</th>
+                <th>Akcije</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var k in Model)
+            {
+                <tr>
+                    <td>@k.Naziv</td>
+                    <td>@k.Grad?.Naziv</td>
+                    <td>@k.Zanr?.Naziv</td>
+                    <td>@(k.CijenaUlaza.HasValue? k.CijenaUlaza + " €" : "Besplatno")</td>
+                    <td>@k.ProsjecnaOcjena.ToString("0.0") ⭐</td>
+                    <td>
+                        @if (k.Aktivan == true)
+                        {
+                            <span class="badge bg-success">Aktivan</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Neaktivan</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-controller="Klub" asp-action="Detalji" asp-route-id="@k.KlubId"
+                           class="btn btn-sm btn-outline-primary">👁 Detalji</a>
+                        <a asp-action="ObrisiKlub" asp-route-id="@k.KlubId"
+                           class="btn btn-sm btn-danger"
+                           onclick="return confirm('Sigurno želiš ukloniti ovaj klub?')">
+                            🗑 Ukloni
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a asp-action="Rezervacije" class="btn btn-secondary mt-2">← Rezervacije</a>
+</div>

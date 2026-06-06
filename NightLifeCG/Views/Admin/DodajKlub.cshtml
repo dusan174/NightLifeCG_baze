@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Dodaj klub";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">➕ Dodaj novi klub</h2>
+
+    <form method="post" asp-action="DodajKlub">
+
+        <div class="mb-3">
+            <label class="form-label">Naziv kluba</label>
+            <input type="text" name="Naziv" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Opis</label>
+            <textarea name="Opis" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Adresa</label>
+            <input type="text" name="Adresa" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Cijena ulaza (€)</label>
+            <input type="number" name="CijenaUlaza" class="form-control"
+                   step="0.01" min="0" placeholder="Ostavite prazno ako je besplatno" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Grad</label>
+            <select name="GradId" class="form-select" required>
+                <option value="">-- Odaberi grad --</option>
+                @foreach (var grad in ViewBag.Gradovi)
+                {
+                    <option value="@grad.GradId">@grad.Naziv</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Muzički žanr</label>
+            <select name="ZanrId" class="form-select">
+                <option value="">-- Odaberi žanr --</option>
+                @foreach (var zanr in ViewBag.Zanrovi)
+                {
+                    <option value="@zanr.ZanrId">@zanr.Naziv</option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">➕ Dodaj klub</button>
+        <a asp-action="Klubovi" class="btn btn-secondary">← Nazad</a>
+    </form>
+</div>
