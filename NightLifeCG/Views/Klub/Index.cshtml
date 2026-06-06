@@ -1,0 +1,79 @@
+﻿@model IEnumerable<NightLifeCG.Models.Klubovi>
+
+@{
+	ViewData["Title"] = "Klubovi";
+}
+<div class="container mt-4">
+	<h2 class="mb-4">Noćni život Crne Gore</h2>
+
+	<form method="get" class="row g-3 mb-4">
+
+		<div class="col-md-4">
+			<input type="text" name="pretraga" value="ViewBag.Pretraga" class="form-control" placeholder="Pretrazi klubove..." />
+		</div>
+
+		<div class="col-md-3">
+			<select name="gradId" class="form-select">
+				<option value="">-- Svi gradovi --</option>
+				@foreach (var grad in ViewBag.Gradovi)
+				{
+						<option value="@grad.GradId" 
+						selected="@(ViewBag.GradId == grad.GradId ? "selected" : null)">
+						</option>
+					}
+			</select>
+		</div>
+		
+		<div class="col-md-3">
+			<select name="zanrId" class="form-select">
+				<option value="">-- Svi žanrovi --</option>
+				@foreach (var zanr in ViewBag.Zanrovi) 
+				{
+					<option value="@zanr.ZanrId"
+							selected="@(ViewBag.ZanrId == zanr.ZanrId ? "selected" : null)">
+						@zanr.Naziv
+					</option>
+				}
+			</select>
+		</div>
+		<div class="col-md-2">
+			<button type="submit" class="btn btn-primary w-100">Traži</button>
+			@* Dugme za slanje forme *@
+		</div>
+
+	</form>
+	<div class="row">
+		@foreach (var klub in Model)
+		{
+			<div class="col-md-4 mb-4">
+				<div class="card h-100 shadow-sm">
+					<div class="card-body">
+						<h5 class="card-title">@klub.Naziv</h5>
+						<p class="text-muted">
+							<i class="bi bi-geo-alt"></i> @klub.Grad?.Naziv
+						</p>
+						<p class="text-muted">
+							<i class="bi bi-music-note"></i> @klub.Zanr?.Naziv
+						</p>
+						<p class="card-text">@klub.Opis</p>
+						<p>
+							<strong>Ocjena:</strong> @klub.ProsjecnaOcjena.ToString("0.0") ⭐
+						</p>
+						@if (klub.CijenaUlaza.HasValue)
+						{
+							<p><strong>Ulaz:</strong> @klub.CijenaUlaza €</p>
+						}
+						else
+						{
+							<p><strong>Ulaz:</strong> Besplatan</p>
+						}
+					</div>
+					<div class="card-footer">
+						<a asp-controller="Klub" asp-action="Detalji" asp-route-id="@klub.KlubId"
+						   class="btn btn-outline-primary w-100">Pogledaj detalje</a>
+					</div>
+				</div>
+			</div>
+		}
+	</div>
+</div>

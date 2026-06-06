@@ -1,0 +1,114 @@
+﻿@model NightLifeCG.Models.Klubovi
+
+@{
+    ViewData["Title"] = Model.Naziv;
+}
+
+<div class="container mt-4">
+
+    @* ---- OSNOVNE INFO ---- *@
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2>@Model.Naziv</h2>
+            <p class="text-muted">
+                📍 @Model.Adresa — @Model.Grad?.Naziv
+            </p>
+            <p class="text-muted">
+                🎵 @Model.Zanr?.Naziv
+            </p>
+            <p>@Model.Opis</p>
+            <p><strong>Prosječna ocjena:</strong> @Model.ProsjecnaOcjena.ToString("0.0") ⭐ (@Model.BrojOcjena ocjena)</p>
+            @if (Model.CijenaUlaza.HasValue)
+            {
+                <p><strong>Cijena ulaza:</strong> @Model.CijenaUlaza €</p>
+            }
+            else
+            {
+                <p><strong>Cijena ulaza:</strong> Besplatno</p>
+            }
+        </div>
+        <div class="col-md-4">
+            <a asp-controller="Rezervacija" asp-action="Kreiraj" asp-route-klubId="@Model.KlubId"
+               class="btn btn-success btn-lg w-100">
+                🪑 Rezerviši sto
+            </a>
+        </div>
+    </div>
+
+    @* ---- DOGADJAJI ---- *@
+    @if (Model.Dogadjajis.Any())
+    {
+        <h4 class="mb-3">Nadolazeći događaji</h4>
+        <div class="row mb-4">
+            @foreach (var d in Model.Dogadjajis)
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">@d.Naziv</h6>
+                            <p class="text-muted">📅 @d.DatumOdrzavanja.ToString("dd.MM.yyyy HH:mm")</p>
+                            @if (d.CijenaKarte.HasValue)
+                            {
+                                <p>🎟️ @d.CijenaKarte €</p>
+                            }
+                            else
+                            {
+                                <p>🎟️ Besplatno</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    @* ---- STOLOVI ---- *@
+    @if (Model.Stolovis.Any())
+    {
+        <h4 class="mb-3">Dostupni stolovi</h4>
+        <div class="row mb-4">
+            @foreach (var s in Model.Stolovis)
+            {
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center @(s.JeVip == true ? "border-warning" : "")">
+                        <div class="card-body">
+                            <h6>Sto @s.BrojStola</h6>
+                            <p>👥 @s.BrojMjesta mjesta</p>
+                            @if (s.JeVip == true)
+                            {
+                                <span class="badge bg-warning text-dark">VIP</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    @* ---- RECENZIJE ---- *@
+    <h4 class="mb-3">Recenzije</h4>
+    @if (Model.Recenzijes.Any())
+    {
+        @foreach (var r in Model.Recenzijes)
+        {
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <strong>@r.Korisnik?.KorisnickoIme</strong>
+                        <span>@r.DatumOcjene.ToString("dd.MM.yyyy")</span>
+                    </div>
+                    <p class="mb-1">⭐ @r.Ocjena/5</p>
+                    <p class="mb-0">@r.Komentar</p>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p class="text-muted">Još nema recenzija za ovaj klub.</p>
+    }
+
+    <a asp-controller="Klub" asp-action="Index" class="btn btn-secondary mt-3">
+        ← Nazad na listu
+    </a>
+</div>
