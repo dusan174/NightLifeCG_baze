@@ -4,6 +4,7 @@ body {
     background-color: #121212;
     color: #ffffff;
     font-family: 'Segoe UI', sans-serif;
+    padding-bottom: 80px;
 }
 
 /* Navigacija */
@@ -74,7 +75,7 @@ body {
 .form-control, .form-select {
     background-color: #1e1e2e;
     border: 1px solid #2a2a3e;
-    color: #ffffff;
+    color: #ffffff !important;
 }
 
     .form-control:focus, .form-select:focus {
@@ -142,4 +143,21 @@ h1, h2, h3, h4, h5, h6 {
 .badge.bg-warning {
     background-color: #e94560 !important;
     color: #ffffff !important;
+}
+body {
+    padding-bottom: 60px;
+}
+
+::placeholder {
+    color: #a0a0b0 !important;
+    opacity: 1;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+main {
+    margin-bottom: 70px;
 }

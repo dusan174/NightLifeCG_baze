@@ -9,28 +9,29 @@
 	<form method="get" class="row g-3 mb-4">
 
 		<div class="col-md-4">
-			<input type="text" name="pretraga" value="ViewBag.Pretraga" class="form-control" placeholder="Pretrazi klubove..." />
+			<input type="text" name="pretraga" value="@(ViewBag.Pretraga ?? "")" class="form-control" placeholder="Pretrazi klubove..." />
 		</div>
 
 		<div class="col-md-3">
 			<select name="gradId" class="form-select">
 				<option value="">-- Svi gradovi --</option>
-				@foreach (var grad in ViewBag.Gradovi)
+				@foreach (var grad in (IEnumerable<NightLifeCG.Models.Gradovi>)ViewBag.Gradovi)
 				{
-						<option value="@grad.GradId" 
-						selected="@(ViewBag.GradId == grad.GradId ? "selected" : null)">
-						</option>
-					}
+					<option value="@grad.GradId"
+							selected="@(ViewBag.GradId != null && ViewBag.GradId == grad.GradId ? "selected" : null)">
+						@grad.Naziv
+					</option>
+				}
 			</select>
 		</div>
 		
 		<div class="col-md-3">
 			<select name="zanrId" class="form-select">
 				<option value="">-- Svi žanrovi --</option>
-				@foreach (var zanr in ViewBag.Zanrovi) 
+				@foreach (var zanr in (IEnumerable<NightLifeCG.Models.MuzickiZanrovi>)ViewBag.Zanrovi)
 				{
 					<option value="@zanr.ZanrId"
-							selected="@(ViewBag.ZanrId == zanr.ZanrId ? "selected" : null)">
+							selected="@(ViewBag.ZanrId != null && ViewBag.ZanrId == zanr.ZanrId ? "selected" : null)">
 						@zanr.Naziv
 					</option>
 				}

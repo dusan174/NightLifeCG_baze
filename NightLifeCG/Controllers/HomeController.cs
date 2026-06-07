@@ -1,25 +1,30 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using NightLifeCG.Models;
+using Microsoft.EntityFrameworkCore;
+using NightLifeCG.Data;
 
 namespace NightLifeCG.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly ILogger<HomeController> _logger;
+        private readonly AppDbContext _db;
+
+        public HomeController(ILogger<HomeController> logger, AppDbContext db)
         {
+            _logger = logger;
+            _db = db;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            ViewBag.BrojKlubova = await _db.Klubovis.CountAsync(k => k.Aktivan == true);
+            ViewBag.BrojGradova = await _db.Gradovis.CountAsync();
             return View();
         }
 
         public IActionResult Privacy()
         {
             return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
