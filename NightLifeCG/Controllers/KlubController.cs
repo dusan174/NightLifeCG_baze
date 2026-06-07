@@ -56,5 +56,37 @@ namespace NightLifeCG.Controllers
             return View(klub);
 
         }
+
+        public async Task<IActionResult> DodajRecenziju(int klubId)
+        {
+            var klub = await _db.Klubovis.FindAsync(klubId);
+            if (klub == null)
+                return NotFound();
+
+            ViewBag.Klub = klub;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DodajRecenziju(int klubId, int ocjena, string komentar)
+        {
+            var korisnik = await _db.Korisnicis.FirstOrDefaultAsync();
+
+            var recenzija = new Recenzije
+            {
+                KlubId = klubId,
+                KorisnikId = korisnik!.KorisnikId,
+                Ocjena = ocjena,
+                Komentar = komentar,
+                DatumOcjene = DateTime.Now
+            };
+
+            _db.Recenzijes.Add(recenzija);
+            await _db.SaveChangesAsync();
+
+            TempData["Uspjeh"] = "Recenzija je uspješno dodana!";
+            return RedirectToAction("Detalji", new { id = klubId });
+        }
+
     }
 }

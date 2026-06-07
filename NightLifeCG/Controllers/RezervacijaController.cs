@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using NightLifeCG.Data;
 using NightLifeCG.Models;
+using System.Security.Claims;
 
 namespace NightLifeCG.Controllers
 {
@@ -71,11 +72,11 @@ namespace NightLifeCG.Controllers
         }
         public async Task<IActionResult> MojeRezervacije()
         {
+
             var rezervacije = await _db.Rezervacijes
                 .Include(r => r.Stol)
                     .ThenInclude(s => s.Klub)
                 .Include(r => r.Korisnik)
-                .OrderByDescending(r => r.DatumKreiranja)
                 .ToListAsync();
 
             return View(rezervacije);

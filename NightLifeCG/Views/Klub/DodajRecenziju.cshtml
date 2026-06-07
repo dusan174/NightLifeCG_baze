@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Dodaj recenziju";
+    var klub = ViewBag.Klub as NightLifeCG.Models.Klubovi;
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">⭐ Ostavi recenziju — @klub?.Naziv</h2>
+
+    <form method="post" asp-action="DodajRecenziju">
+        <input type="hidden" name="klubId" value="@klub?.KlubId" />
+
+        <div class="mb-3">
+            <label class="form-label">Ocjena</label>
+            <select name="ocjena" class="form-select" required>
+                <option value="">-- Odaberi ocjenu --</option>
+                <option value="5">⭐⭐⭐⭐⭐ — Odlično</option>
+                <option value="4">⭐⭐⭐⭐ — Vrlo dobro</option>
+                <option value="3">⭐⭐⭐ — Dobro</option>
+                <option value="2">⭐⭐ — Loše</option>
+                <option value="1">⭐ — Vrlo loše</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Komentar</label>
+            <textarea name="komentar" class="form-control" rows="4"
+                      placeholder="Napiši svoje iskustvo..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">⭐ Objavi recenziju</button>
+        <a asp-action="Detalji" asp-route-id="@klub?.KlubId"
+           class="btn btn-secondary">← Nazad</a>
+        <div class="mb-5"></div>
+    </form>
+</div>
